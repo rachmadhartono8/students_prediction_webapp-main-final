@@ -19,37 +19,24 @@ def index():
 @app.route("/output", methods=["POST", "GET"])
 def output():
     if request.method == 'POST':
-        # Retrieve form data
+        nama_mahasiswa = request.form['nama_mahasiswa']
+        nim = request.form['nim']
         ipk_kum = float(request.form['ipk_kum'])
         if ipk_kum >= 3.0:
             prediction = 'Lulus Tepat Waktu'
         elif ipk_kum <= 2.9:
-            prediction = 'Tidak lulus'
+            prediction = 'Tidak lulus Tepat Waktu'
         else:
             prediction = 'Unknown'
-        # print("error")
 
-        return render_template('output.html', prediction=prediction)
-
-
-        # return render_template('graduationscore.html', prediction=prediction)
-
-        # try:
-        #     prediction = students_pred(ipk_kum)
-        #     return render_template('graduationscore.html', prediction=prediction)
-        # except ValueError:
-        #     return render_template('graduationscore.html')
+        return render_template('output.html', nama_mahasiswa=nama_mahasiswa, nim=nim, ipk_kum=ipk_kum, prediction=prediction)
         
 
-# prediction-model
 def students_pred(ipk_kum):
-    # Load the model
     model = pickle.load(open('model.pkl','rb'))
 
-    # Predictions
     result = model.predict([[ipk_kum]])
 
-    # Output
     if result[0] == 1:
         pred = 'Lulus Tepat Waktu'
     else:
